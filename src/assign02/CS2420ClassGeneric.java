@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 /**
@@ -135,10 +136,10 @@ public class CS2420ClassGeneric<Type> {
 	 uNID in ascending order.
 	 */
 	public ArrayList<CS2420StudentGeneric<Type>> getOrderedByUNID() {
-		ArrayList<CS2420StudentGeneric<Type>> studentListCopy =
-				new ArrayList<CS2420StudentGeneric<Type>>();
-		for(CS2420StudentGeneric<Type> student : studentList)
+		ArrayList<CS2420StudentGeneric<Type>> studentListCopy = new ArrayList<CS2420StudentGeneric<Type>>();
+		for(CS2420StudentGeneric<Type> student : studentList) {
 			studentListCopy.add(student);
+		}
 		sort(studentListCopy, new OrderByUNID());
 		return studentListCopy;
 	}
@@ -150,8 +151,12 @@ public class CS2420ClassGeneric<Type> {
 	 * Breaks ties in first names using uNIDs (ascending order).
 	 */
 	public ArrayList<CS2420StudentGeneric<Type>> getOrderedByName() {
-// FILL IN â do not return null
-		return null;
+		ArrayList<CS2420StudentGeneric<Type>> studentListCopy = new ArrayList<CS2420StudentGeneric<Type>>();
+		for(CS2420StudentGeneric<Type> student : studentList) {
+			studentListCopy.add(student);
+		}
+		sort(studentListCopy, new OrderByName());
+		return studentListCopy;
 	}
 	/**
 	 * Returns the list of CS 2420 students in this class with a final
@@ -165,8 +170,14 @@ public class CS2420ClassGeneric<Type> {
 	 */
 	public ArrayList<CS2420StudentGeneric<Type>>
 	getOrderedByScore(double cutoffScore) {
-// FILL IN â do not return null
-		return null;
+		ArrayList<CS2420StudentGeneric<Type>> studentListCopy = new ArrayList<CS2420StudentGeneric<Type>>();
+		for(CS2420StudentGeneric<Type> student : studentList) {
+			if (student.computeFinalScore() > cutoffScore) { //ASK TA IF YOU SHOULD USE > OR >= HERE
+				studentListCopy.add(student);
+			}
+		}
+		sort(studentListCopy, new OrderByScore());
+		return studentListCopy;
 	}
 	/**
 	 * Performs a SELECTION SORT on the input ArrayList.
@@ -177,8 +188,7 @@ public class CS2420ClassGeneric<Type> {
 	 item to Nth item) and
 	 * repeats steps 1, 2, and 3.
 	 */
-	private static <ListType> void sort(ArrayList<ListType> list,
-										Comparator<ListType> c) {
+	private static <ListType> void sort(ArrayList<ListType> list, Comparator<ListType> c) {
 		for(int i = 0; i < list.size() - 1; i++) {
 			int j, minIndex;
 			for(j = i + 1, minIndex = i; j < list.size();
@@ -197,16 +207,14 @@ public class CS2420ClassGeneric<Type> {
 	 * uNIDs are guaranteed to be unique, making a tie-breaker
 	 unnecessary.
 	 */
-	protected class OrderByUNID implements
-			Comparator<CS2420StudentGeneric<Type>> {
+	protected class OrderByUNID implements Comparator<CS2420StudentGeneric<Type>> {
 		/**
 		 * Returns a negative value if lhs (left-hand side) is
 		 smaller than rhs (right-hand side).
 		 * Returns a positive value if lhs is larger than rhs.
 		 * Returns 0 if lhs and rhs are equal.
 		 */
-		public int compare(CS2420StudentGeneric<Type> lhs,
-						   CS2420StudentGeneric<Type> rhs) {
+		public int compare(CS2420StudentGeneric<Type> lhs, CS2420StudentGeneric<Type> rhs) {
 			return lhs.getUNID() - rhs.getUNID();
 		}
 	}
@@ -217,9 +225,40 @@ public class CS2420ClassGeneric<Type> {
 	 same), then uNID
 	 * (if both names are the same). uNIDs are guaranteed to be unique.
 	 */
-	protected class OrderByName implements
-			Comparator<CS2420StudentGeneric<Type>> {
-// FILL IN
+	protected class OrderByName implements Comparator<CS2420StudentGeneric<Type>> {
+
+		/**
+		 * Returns a negative value if lhs (left-hand side) is
+		 higher in the alphabet than rhs (right-hand side)
+		 (i.e. comparing "A" and "B" would output -1)
+		 * Returns a positive value if lhs is higher in the alphabet
+		 than rhs.
+		 * Returns 0 if lhs and rhs are equal (exact same name).
+		 */
+		public int compare(CS2420StudentGeneric<Type> lhs, CS2420StudentGeneric<Type> rhs) {
+			int output = lhs.getLastName().compareTo(rhs.getLastName());
+			if (output == 0) { //if last names are the same, compare first names
+				output = lhs.getFirstName().compareTo(rhs.getFirstName());
+				if (output == 0) { //if first (and last) names are the same, compare uNID
+					output = lhs.getUNID() - rhs.getUNID();
+				}
+			}
+
+			return output;
+		}
+	}
+
+	protected class OrderByScore implements Comparator<CS2420StudentGeneric<Type>> {
+
+		public int compare(CS2420StudentGeneric<Type> lhs, CS2420StudentGeneric<Type> rhs) {
+			int output = Double.compare(lhs.computeFinalScore(), rhs.computeFinalScore());
+			output = ~(output - 1);
+			if (output == 0) {
+				output = lhs.getUNID() - rhs.getUNID();
+			}
+
+			return output;
+		}
 	}
 
 }

@@ -242,7 +242,7 @@ public class CS2420ClassGenericTester {
 	
 	// Phase 3 tests -----------------------------------------------------------------------------------
 
-	/* @Test
+	@Test
 	public void testOrderedByUNID() {
 		ArrayList<CS2420StudentGeneric<Integer>> actual = phase3Class.getOrderedByUNID();
 		assertEquals(4, actual.size());
@@ -270,5 +270,5 @@ public class CS2420ClassGenericTester {
 		assertEquals(new CS2420StudentGeneric<Integer>("A", "B", 2, 2), actual.get(3));
 		assertEquals(new CS2420StudentGeneric<Integer>("A", "C", 1, 1), actual.get(1));
 		assertEquals(new CS2420StudentGeneric<Integer>("D", "E", 4, 4), actual.get(0));
-	} */
+	}
 }

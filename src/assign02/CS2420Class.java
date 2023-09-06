@@ -73,7 +73,7 @@ public class CS2420Class {
 
 		return students;
 	}
-	
+
 	/**
 	 * Adds an assignment, exam, lab, or quiz score for the CS 2420 student with the given uNID.
 	 * 
