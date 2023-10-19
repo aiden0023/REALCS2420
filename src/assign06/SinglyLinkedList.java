@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class SinglyLinkedList<T> implements List<T> {
 
     private Node<T> head;
-    private static int size;
+    private int size;
 
     public SinglyLinkedList() {
         this.head = null;
@@ -81,12 +81,12 @@ public class SinglyLinkedList<T> implements List<T> {
             throw new IndexOutOfBoundsException();
         } else {
             Node<T> currentNode = head;
-            for (int i = 0; i < index; i++) {
+            for (int i = 0; i < index-1; i++) {
                 currentNode = currentNode.getNext();
             }
 
-            T deleted = currentNode.getData();
-            currentNode = currentNode.getNext();
+            T deleted = currentNode.getNext().getData();
+            currentNode.setNext(currentNode.getNext().getNext());
             size--;
             return deleted;
         }
@@ -139,7 +139,7 @@ public class SinglyLinkedList<T> implements List<T> {
         return new ListIterator<>(head);
     }
 
-    private static class ListIterator<T> implements Iterator<T> {
+    private class ListIterator<T> implements Iterator<T> {
 
         private Node<T> nextNode;
         private Node<T> prevNode;
@@ -169,11 +169,11 @@ public class SinglyLinkedList<T> implements List<T> {
         //MAY NEED TO BE FIXED
         @Override
         public void remove() {
-            if (prevNode == null) {
+            if (!hasNext()) {
                 throw new IllegalStateException();
             } else {
-                prevNode.setNext(nextNode);
-                prevNode = null;
+                prevNode.setNext(nextNode.getNext());
+                nextNode = prevNode.getNext();
                 size--;
             }
         }
