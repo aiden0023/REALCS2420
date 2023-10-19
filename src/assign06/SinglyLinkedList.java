@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class SinglyLinkedList<T> implements List<T> {
 
     private Node<T> head;
-    private int size;
+    private static int size;
 
     public SinglyLinkedList() {
         this.head = null;
@@ -29,7 +29,15 @@ public class SinglyLinkedList<T> implements List<T> {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         } else {
-            
+            Node<T> currentNode = head;
+            Node<T> newNode = new Node<>(element);
+            for (int i = 0; i < index-1; i++) {
+                currentNode = currentNode.next;
+            }
+
+            newNode.next = currentNode.next;
+            currentNode.next = newNode;
+            size++;
         }
     }
 
@@ -44,7 +52,15 @@ public class SinglyLinkedList<T> implements List<T> {
 
     @Override
     public T get(int index) throws IndexOutOfBoundsException {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        } else {
+            Node<T> currentNode = head;
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.next;
+            }
+            return currentNode.data;
+        }
     }
 
     @Override
@@ -61,12 +77,33 @@ public class SinglyLinkedList<T> implements List<T> {
 
     @Override
     public T delete(int index) throws IndexOutOfBoundsException {
-        return null;
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        } else {
+            Node<T> currentNode = head;
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.next;
+            }
+
+            T deleted = currentNode.data;
+            currentNode = currentNode.next;
+            size--;
+            return deleted;
+        }
     }
 
     @Override
     public int indexOf(T element) {
-        return 0;
+        int i = 0;
+        Iterator<T> iterator = iterator();
+        while (iterator.hasNext()) {
+            T nodeData = iterator.next();
+            if (nodeData.equals(element)) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
     @Override
@@ -87,7 +124,14 @@ public class SinglyLinkedList<T> implements List<T> {
 
     @Override
     public T[] toArray() {
-        return null;
+        T[] array = (T[]) new Object[size()];
+        int i = 0;
+        Iterator<T> iterator = iterator();
+        while (iterator.hasNext()) {
+            array[i] = iterator.next();
+            i++;
+        }
+        return array;
     }
 
     @Override
@@ -105,19 +149,19 @@ public class SinglyLinkedList<T> implements List<T> {
         }
     }
 
-    private class ListIterator<T> implements Iterator<T> {
+    private static class ListIterator<T> implements Iterator<T> {
 
-        private Node<T> current;
-        private Node<T> prev;
+        private Node<T> nextNode;
+        private Node<T> prevNode;
 
         public ListIterator(Node<T> head) {
-            this.current = head;
-            this.prev = null;
+            this.nextNode = head;
+            this.prevNode = null;
         }
 
         @Override
         public boolean hasNext() {
-            return current != null;
+            return nextNode != null;
         }
 
         @Override
@@ -125,16 +169,23 @@ public class SinglyLinkedList<T> implements List<T> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             } else {
-                T data = current.data;
-                prev = current;
-                current = current.next;
+                T data = nextNode.data;
+                prevNode = nextNode;
+                nextNode = nextNode.next;
                 return data;
             }
         }
 
+        //MAY NEED TO BE FIXED
         @Override
         public void remove() {
-
+            if (prevNode == null) {
+                throw new IllegalStateException();
+            } else {
+                prevNode.next = nextNode;
+                prevNode = null;
+                size--;
+            }
         }
     }
 }

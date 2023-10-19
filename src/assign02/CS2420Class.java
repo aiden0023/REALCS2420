@@ -12,7 +12,7 @@ import java.util.Scanner;
  * NOTE: The word "Class" in the name of this Java class means a collection of students and should not 
  *       be confused with the Java term class, which is a blueprint for making objects.
  * 
- * @author Aaron Wood and ??
+ * @author Aaron Wood and Aiden Fornalski and Henry Sippel
  * @version 2023-08-31 
  */
 public class CS2420Class {
@@ -34,7 +34,7 @@ public class CS2420Class {
 	 *         false if the student was not added because they already exist in the collection
 	 */
 	public boolean addStudent(CS2420Student student) {
-		if (!studentList.contains(student)) {
+		if (!studentList.contains(student)) { //checking to not add a duplicate student
 			studentList.add(student);
 			return true;
 		}
@@ -87,12 +87,20 @@ public class CS2420Class {
 	public void addScore(int uNID, double score, String category) {
 		CS2420Student student = this.lookup(uNID);
 
-		if (student != null) {
-			switch (category) {
-				case "assignment" -> student.getAssignment().add(score);
-				case "exam" -> student.getExam().add(score);
-				case "lab" -> student.getLab().add(score);
-				case "quiz" -> student.getQuiz().add(score);
+		if (student != null) { //checking to make sure student exists in list
+			switch (category) { //no need for default case since default is to "do nothing"
+				case "assignment":
+					student.getAssignment().add(score);
+					break;
+				case "exam":
+					student.getExam().add(score);
+					break;
+				case "lab":
+					student.getLab().add(score);
+					break;
+				case "quiz":
+					student.getQuiz().add(score);
+					break;
 			}
 		}
 	}
@@ -105,7 +113,7 @@ public class CS2420Class {
 	public double computeClassAverage() {
 		double classAverage = 0;
 		double count = 0;
-		if (!studentList.isEmpty()) {
+		if (!studentList.isEmpty()) { //checking for if student list is not empty
 			for (CS2420Student student : studentList) {
 				classAverage += student.computeFinalScore();
 				count++;

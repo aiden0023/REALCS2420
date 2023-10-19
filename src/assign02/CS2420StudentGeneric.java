@@ -8,17 +8,30 @@ public class CS2420StudentGeneric<Type> extends UofUStudent {
     private ArrayList<Double> exam = new ArrayList<>();
     private ArrayList<Double> lab = new ArrayList<>();
     private ArrayList<Double> quiz = new ArrayList<>();
-    //ASK IF THERE IS A BETTER WAY TO STORE SCORES
 
     public CS2420StudentGeneric(String firstName, String lastName, int uNID, Type contactInfo) {
         super(firstName, lastName, uNID);
         this.contactInfo = contactInfo;
     }
 
+    /**
+     * Gets the contact info of this student.
+     *
+     * @return - contact info of this student
+     */
     public Type getContactInfo() {
         return this.contactInfo;
     }
 
+    /**
+     * Adds an assignment, exam, lab, or quiz score to this student.
+     *
+     * NOTE: If the category string is not one of "assignment", "exam", "lab", or "quiz",
+     * then this method has no effect.
+     *
+     * @param score - the score to be added
+     * @param category - the category in which to add the score
+     */
     public void addScore(double score, String category) {
         switch (category) {
             case "assignment" -> assignment.add(score);
@@ -28,27 +41,39 @@ public class CS2420StudentGeneric<Type> extends UofUStudent {
         }
     }
 
+    /**
+     * Computes the final score of this student (taking into account weights of each category).
+     *
+     * @return - final score of this student
+     */
     public double computeFinalScore() {
+        //computes averages of scores in each category
         double assignmentAverage = this.calculateAverage(assignment);
         double examAverage = this.calculateAverage(exam);
         double labAverage = this.calculateAverage(lab);
         double quizAverage = this.calculateAverage(quiz);
 
-        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) {
+        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) { //checking for at least one score in each category
             return 0.0;
         }
 
-        if (examAverage < 65.0) {
+        if (examAverage < 65.0) { //if exam average is below 65, return exam average
             return examAverage;
         }
 
         return ((assignmentAverage * 35) + (examAverage * 45) + (labAverage * 10) + (quizAverage * 10)) / 100;
     }
 
+    /**
+     * Computes the final grade of this student given the final score.
+     *
+     * @return - final grade of this student
+     */
     public String computeFinalGrade() {
+        //computes final score
         double finalScore = this.computeFinalScore();
 
-        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) {
+        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) { //checking for at least one score in each category
             return "N/A";
         }
 
@@ -81,6 +106,12 @@ public class CS2420StudentGeneric<Type> extends UofUStudent {
         }
     }
 
+    /**
+     * Calculates score averages for a given grade category
+     *
+     * @param category - grade category wishing to average
+     * @return - average of grade category
+     */
     //HELPER METHODS
     private double calculateAverage(ArrayList<Double> category) {
         double average = 0;
@@ -97,31 +128,15 @@ public class CS2420StudentGeneric<Type> extends UofUStudent {
         return assignment;
     }
 
-    public void setAssignment(ArrayList<Double> assignment) {
-        this.assignment = assignment;
-    }
-
     public ArrayList<Double> getExam() {
         return exam;
-    }
-
-    public void setExam(ArrayList<Double> exam) {
-        this.exam = exam;
     }
 
     public ArrayList<Double> getLab() {
         return lab;
     }
 
-    public void setLab(ArrayList<Double> lab) {
-        this.lab = lab;
-    }
-
     public ArrayList<Double> getQuiz() {
         return quiz;
-    }
-
-    public void setQuiz(ArrayList<Double> quiz) {
-        this.quiz = quiz;
     }
 }

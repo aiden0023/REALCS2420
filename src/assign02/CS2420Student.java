@@ -1,7 +1,6 @@
 package assign02;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CS2420Student extends UofUStudent {
     private EmailAddress contactInfo;
@@ -9,47 +8,80 @@ public class CS2420Student extends UofUStudent {
     private ArrayList<Double> exam = new ArrayList<>();
     private ArrayList<Double> lab = new ArrayList<>();
     private ArrayList<Double> quiz = new ArrayList<>();
-    //NOTE: change scores from ArrayList to HashMap if have time
 
     public CS2420Student(String firstName, String lastName, int uNID, EmailAddress contactInfo) {
         super(firstName, lastName, uNID);
         this.contactInfo = contactInfo;
     }
 
+    /**
+     * Gets email address of this student
+     *
+     * @return - email address of this student
+     */
     public EmailAddress getContactInfo() {
         return this.contactInfo;
     }
 
+    /**
+     * Adds an assignment, exam, lab, or quiz score to this student.
+     *
+     * NOTE: If the category string is not one of "assignment", "exam", "lab", or "quiz",
+     * then this method has no effect.
+     *
+     * @param score - the score to be added
+     * @param category - the category in which to add the score
+     */
     public void addScore(double score, String category) {
-        switch (category) {
-            case "assignment" -> assignment.add(score);
-            case "exam" -> exam.add(score);
-            case "lab" -> lab.add(score);
-            case "quiz" -> quiz.add(score);
+        switch (category) { //no need for default case since default is to "do nothing"
+            case "assignment":
+                assignment.add(score);
+                break;
+            case "exam":
+                exam.add(score);
+                break;
+            case "lab":
+                lab.add(score);
+                break;
+            case "quiz":
+                quiz.add(score);
+                break;
         }
     }
 
+    /**
+     * Computes the final score of this student (taking into account weights of each category).
+     *
+     * @return - final score of this student
+     */
     public double computeFinalScore() {
+        //calculates score averages for each category
         double assignmentAverage = this.calculateAverage(assignment);
         double examAverage = this.calculateAverage(exam);
         double labAverage = this.calculateAverage(lab);
         double quizAverage = this.calculateAverage(quiz);
 
-        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) {
+        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) { //checking for all categories to have at least one score
             return 0.0;
         }
 
-        if (examAverage < 65.0) {
+        if (examAverage < 65.0) { //if exam average is below 65, return average
             return examAverage;
         }
 
         return ((assignmentAverage * 35.0) + (examAverage * 45.0) + (labAverage * 10.0) + (quizAverage * 10.0)) / 100.0;
     }
 
+    /**
+     * Computes the final grade of this student given the final score.
+     *
+     * @return - final grade of this student
+     */
     public String computeFinalGrade() {
+        //computes final score
         double finalScore = this.computeFinalScore();
 
-        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) {
+        if (assignment.isEmpty() || exam.isEmpty() || lab.isEmpty() || quiz.isEmpty()) { //checking for all categories to have at least one score
             return "N/A";
         }
 
@@ -83,9 +115,16 @@ public class CS2420Student extends UofUStudent {
     }
 
     //HELPER METHODS
+
+    /**
+     * Calculates score averages for a given grade category
+     *
+     * @param category - grade category wishing to average
+     * @return - average of grade category
+     */
     private double calculateAverage(ArrayList<Double> category) {
-        double average = 0;
-        double count = 0;
+        double average = 0.0;
+        double count = 0.0;
         for (double score : category) {
             average += score;
             count++;
@@ -98,31 +137,15 @@ public class CS2420Student extends UofUStudent {
         return assignment;
     }
 
-    public void setAssignment(ArrayList<Double> assignment) {
-        this.assignment = assignment;
-    }
-
     public ArrayList<Double> getExam() {
         return exam;
-    }
-
-    public void setExam(ArrayList<Double> exam) {
-        this.exam = exam;
     }
 
     public ArrayList<Double> getLab() {
         return lab;
     }
 
-    public void setLab(ArrayList<Double> lab) {
-        this.lab = lab;
-    }
-
     public ArrayList<Double> getQuiz() {
         return quiz;
-    }
-
-    public void setQuiz(ArrayList<Double> quiz) {
-        this.quiz = quiz;
     }
 }
