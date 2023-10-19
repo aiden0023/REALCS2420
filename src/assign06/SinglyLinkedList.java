@@ -18,7 +18,7 @@ public class SinglyLinkedList<T> implements List<T> {
         Node<T> node = new Node<>(element);
 
         if (head != null) {
-            node.next = head;
+            node.setNext(head);
         }
         head = node;
         size++;
@@ -32,11 +32,11 @@ public class SinglyLinkedList<T> implements List<T> {
             Node<T> currentNode = head;
             Node<T> newNode = new Node<>(element);
             for (int i = 0; i < index-1; i++) {
-                currentNode = currentNode.next;
+                currentNode = currentNode.getNext();
             }
 
-            newNode.next = currentNode.next;
-            currentNode.next = newNode;
+            newNode.setNext(currentNode.getNext());
+            currentNode.setNext(newNode);
             size++;
         }
     }
@@ -46,7 +46,7 @@ public class SinglyLinkedList<T> implements List<T> {
         if (isEmpty()) {
             throw new NoSuchElementException();
         } else {
-            return head.data;
+            return head.getData();
         }
     }
 
@@ -57,9 +57,9 @@ public class SinglyLinkedList<T> implements List<T> {
         } else {
             Node<T> currentNode = head;
             for (int i = 0; i < index; i++) {
-                currentNode = currentNode.next;
+                currentNode = currentNode.getNext();
             }
-            return currentNode.data;
+            return currentNode.getData();
         }
     }
 
@@ -68,8 +68,8 @@ public class SinglyLinkedList<T> implements List<T> {
         if (isEmpty()) {
             throw new NoSuchElementException();
         } else {
-            T deleted = head.data;
-            head = head.next;
+            T deleted = head.getData();
+            head = head.getNext();
             size--;
             return deleted;
         }
@@ -82,11 +82,11 @@ public class SinglyLinkedList<T> implements List<T> {
         } else {
             Node<T> currentNode = head;
             for (int i = 0; i < index; i++) {
-                currentNode = currentNode.next;
+                currentNode = currentNode.getNext();
             }
 
-            T deleted = currentNode.data;
-            currentNode = currentNode.next;
+            T deleted = currentNode.getData();
+            currentNode = currentNode.getNext();
             size--;
             return deleted;
         }
@@ -139,16 +139,6 @@ public class SinglyLinkedList<T> implements List<T> {
         return new ListIterator<>(head);
     }
 
-    private static class Node<T> {
-        T data;
-        Node<T> next;
-
-        public Node(T data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
     private static class ListIterator<T> implements Iterator<T> {
 
         private Node<T> nextNode;
@@ -169,9 +159,9 @@ public class SinglyLinkedList<T> implements List<T> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             } else {
-                T data = nextNode.data;
+                T data = nextNode.getData();
                 prevNode = nextNode;
-                nextNode = nextNode.next;
+                nextNode = nextNode.getNext();
                 return data;
             }
         }
@@ -182,7 +172,7 @@ public class SinglyLinkedList<T> implements List<T> {
             if (prevNode == null) {
                 throw new IllegalStateException();
             } else {
-                prevNode.next = nextNode;
+                prevNode.setNext(nextNode);
                 prevNode = null;
                 size--;
             }
