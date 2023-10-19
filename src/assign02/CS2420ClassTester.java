@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * This class contains tests for CS2420Class.
  * 
- * @author Aaron Wood and ??
+ * @author Aaron Wood and Aiden Fornalski and Henry Sippel
  * @version 2023-08-31 
  */
 public class CS2420ClassTester {
@@ -96,7 +96,8 @@ public class CS2420ClassTester {
 		CS2420Student actual = verySmallClass.lookup(2323232);
 		assertEquals(expected, actual);
 	}
-	
+
+
 	@Test
 	public void testVerySmallLookupContactInfo() {
 		UofUStudent expectedStudent = new UofUStudent("Riley", "Nguyen", 4545454);
@@ -336,3 +337,5 @@ public class CS2420ClassTester {
 		assertEquals(50.0, student.computeFinalScore(), 0.001);
 	}
 }
+
+

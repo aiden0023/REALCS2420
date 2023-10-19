@@ -33,11 +33,19 @@ public class CS2420StudentGeneric<Type> extends UofUStudent {
      * @param category - the category in which to add the score
      */
     public void addScore(double score, String category) {
-        switch (category) {
-            case "assignment" -> assignment.add(score);
-            case "exam" -> exam.add(score);
-            case "lab" -> lab.add(score);
-            case "quiz" -> quiz.add(score);
+        switch (category) { //no need for default case because default is to "do nothing"
+            case "assignment":
+                assignment.add(score);
+                break;
+            case "exam":
+                exam.add(score);
+                break;
+            case "lab":
+                lab.add(score);
+                break;
+            case "quiz":
+                quiz.add(score);
+                break;
         }
     }
 

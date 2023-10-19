@@ -9,7 +9,7 @@ import java.util.Comparator;
  * NOTE: The word "Class" in the name of this Java class means a collection of students and should not 
  *       be confused with the Java term class, which is a blueprint for making objects.
  * 
- * @author Aaron Wood and ??
+ * @author Aaron Wood and Aiden Fornalski and Henry Sippel
  * @version 2023-08-31 
  */
 public class CS2420ClassGeneric<Type> {

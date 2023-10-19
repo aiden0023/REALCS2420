@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * This class contains tests for CS2420ClassGeneric.
  * 
- * @author Aaron Wood and ??
+ * @author Aaron Wood and Aiden Fornalski and Henry Sippel
  * @version 2023-08-31 
  */
 public class CS2420ClassGenericTester {

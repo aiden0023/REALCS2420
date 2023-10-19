@@ -4,7 +4,7 @@ package assign02;
  * This class represents a University of Utah student, in which the uNID cannot
  * change once the student is created.  Note that each student's uNID is unique.
  * 
- * @author Aaron Wood and ??
+ * @author Aaron Wood and Aiden Fornalski and Henry Sippel
  * @version 2023-08-31 
  */
 public class UofUStudent {
