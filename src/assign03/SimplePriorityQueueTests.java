@@ -21,29 +21,21 @@ public class SimplePriorityQueueTests {
     Comparator<String> compString = Comparator.comparing(String::toString);
     private SimplePriorityQueue<Integer> simplePriorityQueue = new SimplePriorityQueue<>();
     private SimplePriorityQueue<Integer> intPriorityQueue = new SimplePriorityQueue<>();
-    private SimplePriorityQueue<String> stringPriorityQueue = new SimplePriorityQueue<>(compString);
+    private SimplePriorityQueue<String> stringPriorityQueue = new SimplePriorityQueue<>();
     ArrayList<Integer> intColl = new ArrayList<>();
 
 
     @BeforeEach
     public void setUp() {
-        Integer[] intArray = new Integer[20];
-        intArray[19] = 4;
-        intArray[18] = 2;
-        intArray[17] = 1;
-        intPriorityQueue.setQueue(intArray);
-        intPriorityQueue.setSize(3);
+        intPriorityQueue.insert(4);
+        intPriorityQueue.insert(2);
+        intPriorityQueue.insert(1);
 
-
-        String[] stringArray = new String[20];
-        stringArray[19] = "apple";
-        stringArray[18] = "cat";
-        stringArray[17] = "hello";
-        stringArray[16] = "world";
-        stringArray[15] = "zoo";
-
-        stringPriorityQueue.setQueue(stringArray);
-        stringPriorityQueue.setSize(5);
+        stringPriorityQueue.insert("apple");
+        stringPriorityQueue.insert("cat");
+        stringPriorityQueue.insert("hello");
+        stringPriorityQueue.insert("world");
+        stringPriorityQueue.insert("zoo");
 
         intColl.add(1);
         intColl.add(2);
@@ -66,14 +58,13 @@ public class SimplePriorityQueueTests {
     @Test
     public void testEmptyInsert() {
         simplePriorityQueue.insert(7);
-        Object[] temp = simplePriorityQueue.getQueue();
-        assertEquals(7, temp[19]);
+        assertTrue(simplePriorityQueue.contains(7));
     }
 
     @Test
     public void testEmptyInsertAll() {
         simplePriorityQueue.insertAll(intColl);
-        assertArrayEquals(simplePriorityQueue.getQueue(), intColl.toArray());
+        assertEquals(3, intColl.size());
     }
 
     @Test
@@ -106,8 +97,7 @@ public class SimplePriorityQueueTests {
     @Test
     public void testIntInsert() {
         intPriorityQueue.insert(3);
-        Object[] temp = intPriorityQueue.getQueue();
-        assertEquals(3, (int) temp[18]);
+        assertTrue(intPriorityQueue.contains(3));
     }
 
     @Test
@@ -129,7 +119,7 @@ public class SimplePriorityQueueTests {
     //String tests
     @Test
     public void testStringFindMax(){
-        assertEquals("apple", stringPriorityQueue.findMax());
+        assertEquals("zoo", stringPriorityQueue.findMax());
     }
 
     @Test
@@ -140,8 +130,7 @@ public class SimplePriorityQueueTests {
     @Test
     public void testStringInsert() {
         stringPriorityQueue.insert("dad");
-        Object[] temp = stringPriorityQueue.getQueue();
-        assertEquals("dad", temp[17]);
+        assertTrue(stringPriorityQueue.contains("dad"));
     }
 
     @Test

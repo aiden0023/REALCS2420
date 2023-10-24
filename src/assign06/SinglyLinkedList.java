@@ -3,6 +3,12 @@ package assign06;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * A class that creates a singly linked list
+ * @author Aiden Fornalski
+ * @version 2023-10-19
+ * @param <T> - generic
+ */
 public class SinglyLinkedList<T> implements List<T> {
 
     private Node<T> head;
@@ -136,10 +142,13 @@ public class SinglyLinkedList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return new ListIterator<>(head);
+        return new ListIterator(head);
     }
 
-    private class ListIterator<T> implements Iterator<T> {
+    /**
+     * Iterator class to be used for SinglyLinkedList
+     */
+    private class ListIterator implements Iterator<T> {
 
         private Node<T> nextNode;
         private Node<T> prevNode;
@@ -149,33 +158,85 @@ public class SinglyLinkedList<T> implements List<T> {
             this.prevNode = null;
         }
 
+        /**
+         * Checks to see if the iterator as a next
+         *
+         * @return - if the iterator as a next (true or false)
+         */
         @Override
         public boolean hasNext() {
             return nextNode != null;
         }
 
+        /**
+         * Iterates to the next node in the list
+         *
+         * @return - the next node
+         */
         @Override
         public T next() {
-            if (!hasNext()) {
+            if (!hasNext()) { //check to see if the iterator has a next
                 throw new NoSuchElementException();
             } else {
-                T data = nextNode.getData();
+                T data = nextNode.getData(); //storing node data to return
                 prevNode = nextNode;
                 nextNode = nextNode.getNext();
                 return data;
             }
         }
 
-        //MAY NEED TO BE FIXED
+        /**
+         * Removes the previous node iterated
+         */
         @Override
         public void remove() {
-            if (!hasNext()) {
-                throw new IllegalStateException();
-            } else {
-                prevNode.setNext(nextNode.getNext());
-                nextNode = prevNode.getNext();
-                size--;
+            if (prevNode == null) { //check to see if the iterator has a previous
+                throw new NoSuchElementException();
             }
+
+            if (prevNode == head) { //check to see if the previous node was the head of the list
+                head = nextNode;
+            } else {
+                Node<T> temp = head;
+                while (temp.getNext() != prevNode) { //loop through list until reaching prevNode
+                    temp = temp.getNext();
+                }
+                temp.setNext(nextNode);
+            }
+
+            prevNode = null;
+            size--;
+        }
+    }
+
+    /**
+     * A simple class to create a node object
+     *
+     * @param <T> - generic
+     */
+    private class Node<T> {
+        private T data;
+        private Node<T> next;
+
+        public Node(T data) {
+            this.data = data;
+            this.next = null;
+        }
+
+        public T getData() {
+            return data;
+        }
+
+        public Node<T> getNext() {
+            return next;
+        }
+
+        public void setData(T data) {
+            this.data = data;
+        }
+
+        public void setNext(Node<T> next) {
+            this.next = next;
         }
     }
 }

@@ -1,9 +1,6 @@
 package assign03;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * A simple priority queue that supports access of the maximum element only.
@@ -36,7 +33,7 @@ public class SimplePriorityQueue<E> implements PriorityQueue<E>, Iterable<E> {
         if (this.isEmpty()) { //run empty check
             throw new NoSuchElementException();
         } else {
-            return queue[queue.length-1]; //max is at last index
+            return queue[size-1];
         }
     }
 
@@ -45,48 +42,35 @@ public class SimplePriorityQueue<E> implements PriorityQueue<E>, Iterable<E> {
         if (this.isEmpty()) { //run empty check
             throw new NoSuchElementException();
         } else {
-            E tempMax = queue[queue.length - 1];
-            size--;
-            this.advanceQueue();
-            return tempMax;
+            E max = findMax();
+            queue[--size] = null;
+            return max;
         }
     }
 
     @Override
     public void insert(E item) {
-        if (size == queue.length) { //checks for if queue needs to be enlarged
-            this.enlargeQueue();
+        if (size == queue.length) {
+            enlargeQueue();
         }
-
-        if (queue[queue.length-1] == null) { //if last index is null, insert item at last index
-            queue[queue.length-1] = item;
-        } else {
-            int index = binarySearch(item);
-            E[] tempArray = (E[]) new Object[queue.length];
-            for (int i = queue.length-1; i > index; i--) { //copies upper part of array
-                tempArray[i] = queue[i];
-            }
-
-            for (int i = index; i >= 0; i--) {  //moves lower part of array down the queue
-                if (queue[i] == null) {
-                    break;
-                }
-                tempArray[i-1] = queue[i];
-            }
-            queue = tempArray;
-            queue[index] = item;
-        }
+        int index = findInsertionIndex(item);
+        shiftQueue(index, 1);
+        queue[index] = item;
         size++;
     }
 
     @Override
     public void insertAll(Collection<? extends E> coll) {
-        queue = (E[]) coll.toArray();
+        E[] collArray = (E[]) coll.toArray();
+        for (int i = 0; i < coll.size(); i++) {
+            insert(collArray[i]);
+        }
     }
 
     @Override
     public boolean contains(E item) {
-        return queue[binarySearch(item)].equals(item); //checks if binary search found the item
+        int index = binarySearch(item);
+        return index >= 0 && index < size && queue[index].equals(item);
     }
 
     @Override
@@ -106,26 +90,26 @@ public class SimplePriorityQueue<E> implements PriorityQueue<E>, Iterable<E> {
     }
 
     private int binarySearch(E target) {
-        int low = queue.length-1-size;
-        int high = queue.length-1;
-        int mid = 0;
-        int cmpOutput;
-        while (low <= high) {
-            mid = ((high - low)/2) + low;
-            if (queue[mid] == null) { //if mid is null, move up the search up the queue
-                low = mid+1;
-                continue;
+        int left = 0;
+        int right = size - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            E midItem = queue[mid];
+
+            if (midItem == null) {
+                return -(mid + 1);
             }
-            cmpOutput = compare(queue[mid], target);
-            if (cmpOutput < 0) { //if mid and target compare lower
-                low = mid+1;
-            } else if (cmpOutput > 0) { //if mid and target compare higher
-                high = mid-1;
-            } else {
+
+            int cmp = compare(target, midItem);
+            if (cmp == 0) {
                 return mid;
+            } else if (cmp < 0) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
-        return mid-1;
+        return -(left + 1);
     }
 
     /**
@@ -144,27 +128,35 @@ public class SimplePriorityQueue<E> implements PriorityQueue<E>, Iterable<E> {
     }
 
     /**
-     * Advances the items up the queue.
+     * Shifts the items in the queue.
+     * @param startIndex - the starting index of the shift
+     * @param distance - how many indexes should the items be shifted over by
      */
-    private void advanceQueue() {
-        E[] tempArray = (E[]) new Object[queue.length];
-        for (int i = 0; i < size; i++) {
-            tempArray[i+1] = queue[i];
-        }
-        queue = tempArray;
+    private void shiftQueue(int startIndex, int distance) {
+        System.arraycopy(queue, startIndex, queue, startIndex + distance, size - startIndex);
     }
 
     /**
      * Doubles the size of the queue by 2.
      */
     private void enlargeQueue() {
-        E[] tempArray = (E[]) new Object[queue.length*2];
-        int j = 1;
-        for (int i = size-1; i >= 0; i--) { //adds items from the last index to the first index
-            tempArray[tempArray.length-j] = queue[i];
-            j++;
+        int newCapacity = queue.length * 2;
+        queue = Arrays.copyOf(queue, newCapacity);
+    }
+
+    /**
+     * Finds the index of where the item should be inserted into the queue utilizing
+     * binary search.
+     * @param item - item to be inserted
+     * @return - the index of where the item should be inserted
+     */
+    private int findInsertionIndex(E item) {
+        int index = binarySearch(item);
+        if (index >= 0) {
+            return index;
+        } else {
+            return -(index+1);
         }
-        queue = tempArray;
     }
 
     //TEST HELPER METHODS
