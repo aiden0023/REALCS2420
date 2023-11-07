@@ -191,7 +191,7 @@ public class SinglyLinkedList<T> implements List<T> {
         @Override
         public void remove() {
             if (prevNode == null) { //check to see if the iterator has a previous
-                throw new NoSuchElementException();
+                throw new NoSuchElementException(); //throw IllegalStateException here
             }
 
             if (prevNode == head) { //check to see if the previous node was the head of the list

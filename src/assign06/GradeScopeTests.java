@@ -3,28 +3,220 @@ package assign06;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class GradeScopeTests {
 
-    SinglyLinkedList<Integer> list;
-
-    @BeforeEach
-    public void setup() {
-        list = new SinglyLinkedList<>();
-        /*list.insertFirst(6);
-        list.insertFirst(4);
-        list.insertFirst(17);
-        list.insertFirst(5);
-        list.insertFirst(10);
-        list.insertFirst(14);*/
-    }
+    SinglyLinkedList<Integer> list = new SinglyLinkedList<>();
 
     @Test
-    public void removeIndexSize() {
-        //Ask TA what this test is
+    public void removeIndexSizeMinus1() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(11, list.delete(list.size()-1));
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
+        assertEquals(3, list.size());
     }
 
     @Test
     public void getFirstSmallListCheckReturn() {
-        list.insert(1, 20);
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(20, list.getFirst());
+    }
+
+    @Test
+    public void addToListAtIndexSize() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        list.insert(list.size(), 100);
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
+        assertEquals(5, list.size());
+    }
+
+    @Test
+    public void removeOnEmptyListIterator() {
+        Iterator<Integer> iterator = list.iterator();
+        assertThrows(IllegalStateException.class, ()->{iterator.remove();});
+    }
+
+    @Test
+    public void addToIndex0EmptyList() {
+        SinglyLinkedList<Integer> temp = new SinglyLinkedList<>();
+        temp.insert(0, 1);
+        assertEquals(1, temp.size());
+        assertEquals(1, temp.get(0));
+    }
+
+    @Test
+    public void removeIndex0() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(20, list.delete(0));
+        assertEquals(3, list.size());
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
+    }
+
+    @Test
+    public void callRemoveEveryOtherElementIterator() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        Iterator<Integer> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+            iterator.next();
+        }
+        ArrayList<Integer> temp = new ArrayList<>();
+        temp.add(5);
+        temp.add(11);
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
+    }
+
+    @Test
+    public void checkIndexOfFirstElement () {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(0, list.indexOf(20));
+    }
+
+    @Test
+    public void clearList() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        list.clear();
+        assertEquals(0, list.size());
+        assertEquals(-1, list.indexOf(20));
+        assertEquals(-1, list.indexOf(5));
+        assertEquals(-1, list.indexOf(17));
+        assertEquals(-1, list.indexOf(11));
+    }
+
+    @Test
+    public void callRemoveFor2ConsecutiveElementsIterator() {
+
+    }
+
+    @Test
+    public void deleteFirst() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(20, list.deleteFirst());
+        assertEquals(3, list.size());
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
+    }
+
+    @Test
+    public void checkIndexOfLastElement() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(3, list.indexOf(11));
+    }
+
+    @Test
+    public void simultaneousIteratorInstancesAccurate() {
+
+    }
+
+    @Test
+    public void callNextAfterFullIteration() {
+
+    }
+
+    @Test
+    public void checkIndexOfMiddleElement() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(2, 17);
+    }
+
+    @Test
+    public void checkToArray() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        Integer[] listArray = list.toArray();
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), listArray[i]);
+        }
+    }
+
+    @Test
+    public void callRemoveTwiceInARowIterator() {
+
+    }
+
+    @Test
+    public void checkIndexOfNonExistentElement() {
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        assertEquals(-1, list.indexOf(10));
+    }
+
+    @Test
+    public void manyAddsAndRemovesRandomly() {
+
+    }
+
+    @Test
+    public void createLargeListByAddingAtRandomIndexes() {
+
     }
 }
