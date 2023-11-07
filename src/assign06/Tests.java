@@ -132,7 +132,4 @@ public class Tests {
     public void sizeStackTest() {
         assertEquals(stack.size(), 6);
     }
-
-    @Test
-    public void
 }
