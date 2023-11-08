@@ -180,7 +180,13 @@ public class GradeScopeTests {
 
     @Test
     public void simultaneousIteratorInstancesAccurate() {
-        //????
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        Iterator<Integer> iterator1 = list.iterator();
+        Iterator<Integer> iterator2 = list.iterator();
+        assertEquals(iterator1.next(), iterator2.next());
     }
 
     @Test

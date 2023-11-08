@@ -43,8 +43,12 @@ public class SinglyLinkedList<T> implements List<T> {
                 currentNode = currentNode.getNext();
             }
 
-            newNode.setNext(currentNode.getNext());
-            currentNode.setNext(newNode);
+            if (currentNode.getNext() == null) {
+                currentNode.setNext(newNode);
+            } else {
+                newNode.setNext(currentNode.getNext());
+                currentNode.setNext(newNode);
+            }
             size++;
         }
     }
@@ -85,8 +89,10 @@ public class SinglyLinkedList<T> implements List<T> {
 
     @Override
     public T delete(int index) throws IndexOutOfBoundsException {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
+        } else if (index == 0) {
+            return deleteFirst();
         } else {
             Node<T> currentNode = head;
             for (int i = 0; i < index-1; i++) {
@@ -193,7 +199,7 @@ public class SinglyLinkedList<T> implements List<T> {
         @Override
         public void remove() {
             if (prevNode == null) { //check to see if the iterator has a previous
-                throw new NoSuchElementException(); //throw IllegalStateException here
+                throw new IllegalStateException();
             }
 
             if (prevNode == head) { //check to see if the previous node was the head of the list
