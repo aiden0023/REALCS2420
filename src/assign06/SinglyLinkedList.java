@@ -32,8 +32,10 @@ public class SinglyLinkedList<T> implements List<T> {
 
     @Override
     public void insert(int index, T element) throws IndexOutOfBoundsException {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
+        } else if (index == 0) {
+            insertFirst(element);
         } else {
             Node<T> currentNode = head;
             Node<T> newNode = new Node<>(element);

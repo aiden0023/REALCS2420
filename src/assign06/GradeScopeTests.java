@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -132,7 +134,22 @@ public class GradeScopeTests {
 
     @Test
     public void callRemoveFor2ConsecutiveElementsIterator() {
-
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        Iterator<Integer> iterator = list.iterator();
+        iterator.next();
+        iterator.remove();
+        iterator.next();
+        iterator.remove();
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
     }
 
     @Test
@@ -163,12 +180,20 @@ public class GradeScopeTests {
 
     @Test
     public void simultaneousIteratorInstancesAccurate() {
-
+        //????
     }
 
     @Test
     public void callNextAfterFullIteration() {
-
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        Iterator<Integer> iterator = list.iterator();
+        while(iterator.hasNext()) {
+            iterator.next();
+        }
+        assertThrows(NoSuchElementException.class, ()->{iterator.next();});
     }
 
     @Test
@@ -198,7 +223,14 @@ public class GradeScopeTests {
 
     @Test
     public void callRemoveTwiceInARowIterator() {
-
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        Iterator<Integer> iterator = list.iterator();
+        iterator.next();
+        iterator.remove();
+        assertThrows(IllegalStateException.class, ()->{iterator.remove();});
     }
 
     @Test
@@ -212,11 +244,36 @@ public class GradeScopeTests {
 
     @Test
     public void manyAddsAndRemovesRandomly() {
-
+        list.insert(0, 20);
+        list.insert(1, 5);
+        list.insert(2, 17);
+        list.insert(3, 11);
+        list.delete(3);
+        list.insert(3, 23);
+        list.insert(4, 50);
+        list.delete(1);
+        list.delete(2);
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
     }
 
     @Test
     public void createLargeListByAddingAtRandomIndexes() {
-
+        Random rand = new Random();
+        for (int i = 0; i < 20; i++) {
+            list.insert(rand.nextInt(list.size()), rand.nextInt(1000));
+        }
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            temp.add(list.get(i));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            assertEquals(temp.get(i), list.get(i));
+        }
     }
 }
