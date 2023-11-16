@@ -1,6 +1,7 @@
 package assign09;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +29,13 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(K key) {
+        int index = findIndex(key);
+        LinkedList<MapEntry<K, V>> list = table.get(index);
+        for (MapEntry<K, V> mapEntry : list) {
+            if (mapEntry.getKey().equals(key)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -43,6 +51,13 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
+        int index = findIndex(key);
+        LinkedList<MapEntry<K, V>> list = table.get(index);
+        for (MapEntry<K, V> mapEntry : list) {
+            if (mapEntry.getKey().equals(key)) {
+                return mapEntry.getValue();
+            }
+        }
         return null;
     }
 
@@ -53,12 +68,14 @@ public class HashTable<K, V> implements Map<K, V> {
 
     @Override
     public V put(K key, V value) {
-        int index = Math.abs(key.hashCode()) % capacity;
+        int index = findIndex(key);
         MapEntry<K, V> mapEntry = new MapEntry<>(key, value);
+        LinkedList<MapEntry<K, V>> list = table.get(index);
         if (containsKey(key)) {
-
+            V prevValue = remove(key);
+            list.add(mapEntry);
+            return prevValue;
         } else {
-            LinkedList<MapEntry<K, V>> list = table.get(index);
             list.add(mapEntry);
             return null;
         }
@@ -72,5 +89,9 @@ public class HashTable<K, V> implements Map<K, V> {
     @Override
     public int size() {
         return size;
+    }
+
+    private int findIndex(K key) {
+        return Math.abs(key.hashCode()) % capacity;
     }
 }
