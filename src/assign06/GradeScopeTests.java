@@ -208,7 +208,7 @@ public class GradeScopeTests {
         list.insert(1, 5);
         list.insert(2, 17);
         list.insert(3, 11);
-        assertEquals(2, 17);
+        assertEquals(2, list.indexOf(17));
     }
 
     @Test
@@ -271,7 +271,8 @@ public class GradeScopeTests {
     @Test
     public void createLargeListByAddingAtRandomIndexes() {
         Random rand = new Random();
-        for (int i = 0; i < 20; i++) {
+        list.insert(0, rand.nextInt(1000));
+        for (int i = 1; i < 20; i++) {
             list.insert(rand.nextInt(list.size()), rand.nextInt(1000));
         }
         ArrayList<Integer> temp = new ArrayList<>();

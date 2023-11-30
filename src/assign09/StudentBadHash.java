@@ -8,8 +8,8 @@ import java.text.DecimalFormat;
  * object, but one that does a poor job of distributing students in a hash
  * table.
  *
- * @author Aaron Wood and ??
- * @version 2023-11-02
+ * @author Aaron Wood and Aiden Fornalski
+ * @version 2023-11-16
  */
 public class StudentBadHash {
 
@@ -74,8 +74,6 @@ public class StudentBadHash {
 	}
 
 	public int hashCode() {
-		// FILL IN and add method comment
-
-		return 0;
+		return 1;
 	}
 }
